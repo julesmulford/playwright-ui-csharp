@@ -1,0 +1,84 @@
+name: Playwright UI Tests (C#)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Install Playwright browsers
+        run: pwsh src/PlaywrightUI.Tests/bin/Release/net8.0/playwright.ps1 install --with-deps
+
+      - name: Run smoke tests
+        env:
+          TEST_ENVIRONMENT: CI
+        run: |
+          dotnet test \
+            --no-build \
+            --configuration Release \
+            --filter "Category=Smoke" \
+            --logger "trx;LogFileName=smoke-results.trx" \
+            --results-directory TestResults/Smoke \
+            -- NUnit.DefaultTestNamePattern="{m}{a}"
+
+      - name: Run regression tests
+        if: always()
+        env:
+          TEST_ENVIRONMENT: CI
+        run: |
+          dotnet test \
+            --no-build \
+            --configuration Release \
+            --filter "Category=Regression" \
+            --logger "trx;LogFileName=regression-results.trx" \
+            --results-directory TestResults/Regression \
+            -- NUnit.DefaultTestNamePattern="{m}{a}"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-csharp
+          path: allure-results/
+          retention-days: 30
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-csharp
+          path: TestResults/
+          retention-days: 30
+
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts-csharp
+          path: |
+            TestResults/Videos/
+            TestResults/Traces/
+            TestResults/Logs/
+          retention-days: 7

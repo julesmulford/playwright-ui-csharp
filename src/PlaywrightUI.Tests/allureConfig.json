@@ -1,0 +1,23 @@
+{
+  "allure": {
+    "directory": "allure-results",
+    "links": [],
+    "categories": [
+      {
+        "name": "Login failures",
+        "messageRegex": ".*login.*",
+        "matchedStatuses": ["failed"]
+      },
+      {
+        "name": "Assertion failures",
+        "messageRegex": ".*Expected.*",
+        "matchedStatuses": ["failed"]
+      },
+      {
+        "name": "Timeout errors",
+        "messageRegex": ".*Timeout.*|.*TimeoutException.*",
+        "matchedStatuses": ["failed", "broken"]
+      }
+    ]
+  }
+}
