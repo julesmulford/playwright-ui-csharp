@@ -1,8 +1,8 @@
 # playwright-ui-csharp
 
-> **GitHub repo description:** Enterprise-grade Playwright UI test framework — .NET 8, NUnit, FluentAssertions, Serilog, Allure, Page Object Model targeting OrangeHRM.
+Playwright UI test framework — .NET 8, NUnit, FluentAssertions, Serilog, Allure, Page Object Model targeting OrangeHRM.
 
-A production-ready Web UI test automation framework built with Microsoft Playwright for .NET, demonstrating enterprise patterns including Page Object Model, builder-based test data, structured logging with per-test correlation IDs, Allure reporting with rich failure evidence (screenshots, video, traces), and safe parallel execution.
+Web UI test automation framework built with Microsoft Playwright for .NET, demonstrating enterprise patterns including Page Object Model, builder-based test data, structured logging with per-test correlation IDs, Allure reporting with rich failure evidence (screenshots, video, traces), and safe parallel execution.
 
 ## Why NUnit over xUnit?
 
