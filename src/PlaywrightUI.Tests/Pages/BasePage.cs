@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using PlaywrightUI.Tests.Config;
 using Serilog;
